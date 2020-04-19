@@ -1,0 +1,80 @@
+body {
+  background-color: #f3efcc;
+}
+
+h1 {
+  font-family: Verdana, Geneva, sans-serif;
+  text-align: center;
+  font-size: 24px;
+  color: #5e3800;
+  font-style: normal;
+  font-variant: normal;
+}
+
+p {
+  font-family: Verdana, Geneva, sans-serif;
+  text-align: center;
+  color: #5e3800;
+  font-size: 18px;
+  font-style: normal;
+  font-variant: normal;
+  padding: 2px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+p.ex1 {
+  max-width: 720px;
+}
+
+section {
+    overflow: auto;
+    padding: 10px;
+}
+
+#chart {
+  max-width: 720px;
+  margin: 35px auto;
+}
+
+select {
+  background-color: #f3efcc;
+  padding: 8px;
+  border-radius: 8px;
+  border: none;
+  font-family: Verdana, Geneva, sans-serif;
+  color: #5e3800;
+  text-align: center;
+  font-size: 24px;
+  margin: 12px;
+}
+
+.button {
+  display: inline-block;
+  border-radius: 4px;
+  background-color: #5e3800;
+  border: none;
+  color: #f3efcc;
+  text-align: center;
+  font-size: 24px;
+  padding: 8px;
+  transition: all 0.5s;
+  cursor: pointer;
+  margin: 12px;
+}
+
+.button span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+
+.button span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}

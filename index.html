@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Visualisation</title>
+    <link href="style.css" rel="stylesheet" type="text/css" />
+    <script src="https://unpkg.com/papaparse@latest/papaparse.min.js"></script>
+    <script src="https://unpkg.com/apexcharts@3.18.1/dist/apexcharts.min.js"></script>
+    <script src="script.js"></script>
+  </head>
+  <body>
+    <h1>Quick COVID Data Viewer</h1>
+    <p class="ex1">This tool retrieves up-to-date data of COVID outbreak worldwide from "Our World in Data" and renders the data into an interactive graph. It is an lightweight alternative for quick data viewing.</p>
+    <section>
+      <div align="center">
+        <select id="locality-dropdown" name="locality"></select>
+        <select id="data-dropdown" name="visualdata"></select>
+        <select id="date-dropdown" name="datedata"></select>
+      </div>
+      <div align="center">
+        <button class="button" onclick="submit()" style="vertical-align:middle">Go</button>
+      </div>
+    </section>
+    <section>
+      <p id="content-display"></p>
+      <div align="center" id="chart"></div>
+    </section>
+  </body>
+</html>

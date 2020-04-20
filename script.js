@@ -46,7 +46,7 @@ function submit() {
   var dropdown3 = document.getElementById('date-dropdown')
 
   if (!dropdown1.selectedIndex || !dropdown2.selectedIndex || !dropdown3.selectedIndex) {
-    document.getElementById('content-display').innerHTML = 'Please choose an option for all fields'
+    document.getElementById('content-display').innerHTML = 'Please select an option for each field'
   } else {
     var filtered = data_vals.data.filter(e => {
       return e.location === document.getElementById('locality-dropdown').value
@@ -74,6 +74,16 @@ function submit() {
             enabled: true
           }
         }
+      },
+      stroke: {
+        curve: 'smooth',
+        width: 2
+      },
+      dataLabels: {
+        enabled: false
+      },
+      title: {
+        text: "Selected data to date for " + document.getElementById('locality-dropdown').value
       },
       series: [{
         name: document.getElementById('data-dropdown').value,

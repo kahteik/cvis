@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -32,9 +32,14 @@ jobs:
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-        pwd 1>&2
-        ls -la 1>&2
     - name: Run script
       run: |
         cd assets
+        mkdir -p data
         python pulldata.py
+    - name: Push to gh-pages
+      uses: Automattic/action-commit-to-branch@master
+      with:
+        branch: 'gh-pages'
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required

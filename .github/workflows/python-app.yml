@@ -40,6 +40,6 @@ jobs:
     - name: Push to gh-pages
       uses: Automattic/action-commit-to-branch@master
       with:
-        branch: 'gh-pages'
+        branch: 'dataset'
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required

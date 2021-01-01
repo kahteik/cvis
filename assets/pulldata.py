@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import csv
-import logging
 from urllib import request
 from urllib.parse import urlparse
 
@@ -26,7 +24,7 @@ def loadResource(urlStr:str):
 def main():
     # Initialisation of values
     sourceUrl = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
-    workDir = "./data"
+    workDir = "/tmp/data"
     workDir = os.path.abspath(os.path.expanduser(os.path.expandvars(workDir)))
 
     # Check if resources are accessible

@@ -35,7 +35,7 @@ def main():
     lines = [i.decode('utf-8') for i in loadResource(sourceUrl).readlines()]  # convert byte type to str
 
     header = lines[0].split(',')
-    dataName = header.copy() - ['iso_code', 'continent', 'location', 'date']  # create a list of stats types
+    dataName = [g for g in header if g not in ['iso_code', 'continent', 'location', 'date']]  # create a list of stats types
     del lines[0]  # remove header from list
 
     masterList = list()

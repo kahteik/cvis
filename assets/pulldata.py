@@ -23,7 +23,7 @@ def loadResource(urlStr:str):
 
 def main():
     # Initialisation of values
-    sourceUrl = "http://127.0.0.1:8080/sas.csv"
+    sourceUrl = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
     if os.getenv("GITHUB_WORKSPACE"):
         workDir = os.path.join(os.getenv("GITHUB_WORKSPACE"), "assets", "data")
     else:

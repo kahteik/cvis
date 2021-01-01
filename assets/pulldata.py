@@ -53,7 +53,7 @@ def main():
         for m, n in entry.items():  # scrutinise the recordObj by the pairs
             if m in dataName:  # if header value belongs to one of the stat types
                 fileDir = os.path.join(workDir, entry["location"], m, entry["date"])
-                os.mkdir(fileDir, exist_ok=True)
+                os.makedirs(fileDir, exist_ok=True)
                 open(os.path.join(fileDir, n), 'a').close()
 
 if __name__ == "__main__":

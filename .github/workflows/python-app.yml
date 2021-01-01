@@ -36,7 +36,8 @@ jobs:
     - name: Run script
       run: |
         cd assets && mkdir -p /tmp/data && python3 pulldata.py
+        tar czf data.tar.gz /tmp/data
     - uses: actions/upload-artifact@v2
       with:
         name: my-artifact
-        path: /tmp/data
+        path: assets/data.tar.gz

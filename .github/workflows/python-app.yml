@@ -37,9 +37,9 @@ jobs:
         cd assets
         mkdir -p data
         python pulldata.py
-    - name: Push to gh-pages
+    - name: Push to dataset branch
       uses: Automattic/action-commit-to-branch@master
       with:
         branch: 'dataset'
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Required
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,4 +1,4 @@
-function dropDownOptions(element_id, default_text, item_key) {
+function dropDownOptions (element_id, default_text, item_key) {
   var dropdown = document.getElementById(element_id)
   dropdown.length = 0
 
@@ -9,7 +9,7 @@ function dropDownOptions(element_id, default_text, item_key) {
   dropdown.selectedIndex = 0
 
   item_key.sort()
-  if (element_id === "date-dropdown") {
+  if (element_id === 'date-dropdown') {
     item_key.reverse()
   }
 
@@ -25,22 +25,7 @@ function dropDownOptions(element_id, default_text, item_key) {
   }
 }
 
-function updateDropDown(items) {
-  data_vals = items.meta.fields.filter(e => e !== 'date')
-  data_vals = data_vals.filter(e => e !== 'location')
-
-  dropDownOptions('locality-dropdown', 'Choose a region', items.data.map((value, index, array) => {
-    return value.location
-  }))
-  dropDownOptions('data-dropdown', 'Choose data', data_vals)
-  dropDownOptions('date-dropdown', 'Choose a date', items.data.map((value, index, array) => {
-    return value.date
-  }))
-
-  data_vals = items
-}
-
-function submit() {
+function submit () {
   var dropdown1 = document.getElementById('locality-dropdown')
   var dropdown2 = document.getElementById('data-dropdown')
   var dropdown3 = document.getElementById('date-dropdown')
@@ -48,74 +33,52 @@ function submit() {
   if (!dropdown1.selectedIndex || !dropdown2.selectedIndex || !dropdown3.selectedIndex) {
     document.getElementById('content-display').innerHTML = 'Please select an option for each field'
   } else {
-    var filtered = data_vals.data.filter(e => {
-      return e.location === document.getElementById('locality-dropdown').value
-    })
-    filtered = filtered.filter(e => {
-      return e.date === document.getElementById('date-dropdown').value
-    })
-    console.log(filtered)
-
-    if (filtered.length !== 0) {
-      document.getElementById('content-display').innerHTML = "Number of cases: " + filtered[0][document.getElementById('data-dropdown').value]
-    } else {
-      document.getElementById('content-display').innerHTML = "No data found"
-      return
-    }
-
-    filtered = data_vals.data.filter(e => {
-      return e.location === document.getElementById('locality-dropdown').value
-    })
-    var values = {
-      chart: {
-        type: "area",
-        animations: {
-          initialAnimation: {
-            enabled: true
-          }
-        }
-      },
-      stroke: {
-        curve: 'smooth',
-        width: 2
-      },
-      dataLabels: {
-        enabled: false
-      },
-      title: {
-        text: "Selected data to date for " + document.getElementById('locality-dropdown').value
-      },
-      series: [{
-        name: document.getElementById('data-dropdown').value,
-        data: filtered.map(e => {
-          return {
-            x: e.date,
-            y: e[document.getElementById('data-dropdown').value]
-          }
-        })
-      }],
-      xaxis: {
-        type: "datetime"
+    var reqUrl = [gitAPI[0], '/', dropdown1.value, '/', dropdown2.value, '/', dropdown3.value, gitAPI[1]]
+    w3.getHttpObject(reqUrl.join(''), (resp) => {
+      item = resp.pop()
+      if (item.type == "file") {
+        document.getElementById('content-display').innerHTML = 'Number of cases: ' + item.name
       }
-    }
-
-    if (chart) {
-      chart.destroy()
-    }
-    chart = new ApexCharts(document.querySelector('#chart'), values)
-    chart.render()
+    })
   }
 }
 
-var data_vals
-var chart
-Papa.parse('https://covid.ourworldindata.org/data/ecdc/full_data.csv', {
-  download: true,
-  header: true,
-  dynamicTyping: true,
-  complete: results => {
-    console.log('Complete', results.data.length, 'records.');
-    updateDropDown(results)
-  }
-})
+function initLoc (resp) {
+  dropDownOptions('locality-dropdown', 'Choose a region', resp.map(function (item) {
+    return item.name
+  }))
+}
 
+function updateType () {
+  var dropdown1 = document.getElementById('locality-dropdown')
+  var dropdown2 = document.getElementById('data-dropdown')
+  var dropdown3 = document.getElementById('date-dropdown')
+  if (dropdown1.selectedIndex) {
+    var reqUrl = [gitAPI[0], '/', dropdown1.value, gitAPI[1]]
+    w3.getHttpObject(reqUrl.join(''), (resp) => {
+      dropDownOptions('data-dropdown', 'Choose data', resp.map(function (item) { return item.name }))
+    })
+  } else {
+    dropdown2.innerHTML = ''
+    dropdown3.innerHTML = ''
+  }
+}
+
+function updateDate () {
+  var dropdown1 = document.getElementById('locality-dropdown')
+  var dropdown2 = document.getElementById('data-dropdown')
+  var dropdown3 = document.getElementById('date-dropdown')
+  if (dropdown2.selectedIndex) {
+    var reqUrl = [gitAPI[0], '/', dropdown1.value, '/', dropdown2.value, gitAPI[1]]
+    w3.getHttpObject(reqUrl.join(''), (resp) => {
+      dropDownOptions('date-dropdown', 'Choose a date', resp.map(function (item) { return item.name }))
+    })
+  } else {
+    dropdown3.innerHTML = ''
+  }
+}
+
+var gitAPI = ['https://api.github.com/repos/kahteik/cvis/contents/assets/data', '?ref=dataset']
+w3.getHttpObject(gitAPI.join(''), initLoc)
+document.getElementById('locality-dropdown').addEventListener('change', updateType)
+document.getElementById('data-dropdown').addEventListener('change', updateDate)

@@ -4,9 +4,9 @@
 name: Python application
 
 on:
-  push: ['revamp']
+  push: ['master']
   schedule:
-    - cron: "45 09 * * *"
+    - cron: "30 */12 * * *"
 
 jobs:
   build:

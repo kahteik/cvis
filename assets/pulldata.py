@@ -57,6 +57,10 @@ def main():
                 fileDir = os.path.join(workDir, entry["location"], m, entry["date"])
                 os.makedirs(fileDir, exist_ok=True)
                 open(os.path.join(fileDir, n), 'a').close()
+                historyFile = os.path.join(workDir, entry["location"], m, "history.csv")
+                with open(historyFile, 'a') as fileObj:
+                    fileObj.write(entry["date"] + ',' + n + '\n')
+
 
 if __name__ == "__main__":
     main()

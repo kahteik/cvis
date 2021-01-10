@@ -56,7 +56,9 @@ function updateType () {
   if (dropdown1.selectedIndex) {
     var reqUrl = [gitAPI[0], '/', dropdown1.value, gitAPI[1]]
     w3.getHttpObject(reqUrl.join(''), (resp) => {
-      dropDownOptions('data-dropdown', 'Choose data', resp.map(function (item) { return item.name }))
+      dropDownOptions('data-dropdown', 'Choose data', resp.map(function (item) { if (item.type == "dir") {
+        return item.name
+      }}))
     })
   } else {
     dropdown2.innerHTML = ''
@@ -71,7 +73,9 @@ function updateDate () {
   if (dropdown2.selectedIndex) {
     var reqUrl = [gitAPI[0], '/', dropdown1.value, '/', dropdown2.value, gitAPI[1]]
     w3.getHttpObject(reqUrl.join(''), (resp) => {
-      dropDownOptions('date-dropdown', 'Choose a date', resp.map(function (item) { return item.name }))
+      dropDownOptions('date-dropdown', 'Choose a date', resp.map(function (item) { if (item.type == "dir") {
+        return item.name
+      }}))
     })
   } else {
     dropdown3.innerHTML = ''

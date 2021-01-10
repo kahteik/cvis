@@ -62,8 +62,8 @@ function updateType () {
     })
   } else {
     dropdown2.innerHTML = ''
-    dropdown3.innerHTML = ''
   }
+  dropdown3.innerHTML = ''
 }
 
 function updateDate () {

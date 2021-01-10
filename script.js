@@ -34,13 +34,63 @@ function submit () {
     document.getElementById('content-display').innerHTML = 'Please select an option for each field'
   } else {
     var reqUrl = [gitAPI[0], '/', dropdown1.value, '/', dropdown2.value, '/', dropdown3.value, gitAPI[1]]
-    w3.getHttpObject(reqUrl.join(''), (resp) => {
+    d3.json(reqUrl.join('')).then((resp) => {
       item = resp.pop()
       if (item.type == "file") {
         document.getElementById('content-display').innerHTML = 'Number of cases: ' + item.name
       }
     })
   }
+
+  // Draw chart
+  resUrl = [
+    "https://raw.githubusercontent.com/kahteik/cvis/dataset/assets/data",
+    dropdown1.value,
+    dropdown2.value,
+    "history.csv"
+  ]
+  d3.text(resUrl.join("/")).then(makeChart)
+}
+
+function makeChart(resp) {
+  var dataList = d3.csvParseRows(resp)
+  var values = {
+    chart: {
+      type: "area",
+      animations: {
+        initialAnimation: {
+          enabled: true
+        }
+      }
+    },
+    stroke: {
+      curve: 'smooth',
+      width: 2
+    },
+    dataLabels: {
+      enabled: false
+    },
+    title: {
+      text: "Selected data to date for " + document.getElementById('locality-dropdown').value
+    },
+    series: [{
+      name: document.getElementById('data-dropdown').value,
+      data: dataList.map(e => {
+        return {
+          x: e[0],
+          y: e[1]
+        }
+      })
+    }],
+    xaxis: {
+      type: "datetime"
+    }
+  }
+  if (chart) {
+    chart.destroy()
+  }
+  chart = new ApexCharts(document.querySelector('#chart'), values)
+  chart.render()
 }
 
 function initLoc (resp) {
@@ -55,7 +105,7 @@ function updateType () {
   var dropdown3 = document.getElementById('date-dropdown')
   if (dropdown1.selectedIndex) {
     var reqUrl = [gitAPI[0], '/', dropdown1.value, gitAPI[1]]
-    w3.getHttpObject(reqUrl.join(''), (resp) => {
+    d3.json(reqUrl.join('')).then((resp) => {
       dropDownOptions('data-dropdown', 'Choose data', resp.map(function (item) { if (item.type == "dir") {
         return item.name
       }}))
@@ -72,7 +122,7 @@ function updateDate () {
   var dropdown3 = document.getElementById('date-dropdown')
   if (dropdown2.selectedIndex) {
     var reqUrl = [gitAPI[0], '/', dropdown1.value, '/', dropdown2.value, gitAPI[1]]
-    w3.getHttpObject(reqUrl.join(''), (resp) => {
+    d3.json(reqUrl.join('')).then((resp) => {
       dropDownOptions('date-dropdown', 'Choose a date', resp.map(function (item) { if (item.type == "dir") {
         return item.name
       }}))
@@ -82,7 +132,8 @@ function updateDate () {
   }
 }
 
+var chart
 var gitAPI = ['https://api.github.com/repos/kahteik/cvis/contents/assets/data', '?ref=dataset']
-w3.getHttpObject(gitAPI.join(''), initLoc)
+d3.json(gitAPI.join('')).then(initLoc)
 document.getElementById('locality-dropdown').addEventListener('change', updateType)
 document.getElementById('data-dropdown').addEventListener('change', updateDate)

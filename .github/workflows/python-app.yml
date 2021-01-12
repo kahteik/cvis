@@ -39,6 +39,7 @@ jobs:
     - name: Run script
       run: |
         cd assets
+        find . -type f -name history.csv -exec rm -rf {} \;
         mkdir -p data
         python pulldata.py
     - name: Push to dataset branch
